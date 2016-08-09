@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/ivProfileImage"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_launcher"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/username"
+        android:id="@+id/tvUserName"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        android:textStyle="normal"
+        android:textColor="@android:color/black"
+        android:visibility="visible"
+        android:paddingLeft="10dp"
+        android:lineSpacingExtra="25dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tweetBody"
+        android:id="@+id/tvBody"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        android:layout_below="@+id/tvUserName"
+        android:textStyle="normal"
+        android:textColor="@android:color/black"
+        android:visibility="visible"
+        android:paddingLeft="10dp"
+        android:paddingTop="0.5dp"
+        android:paddingBottom="10dp"
+        android:lineSpacingExtra="1dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/timestamp"
+        android:id="@+id/tvTimeStamp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="@android:color/black"/>
+
+</RelativeLayout>

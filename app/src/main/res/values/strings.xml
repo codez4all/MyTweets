@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MyTweets</string>
+    <string name="action_setting">Settings</string>
+    <string name="login_label">Connect to twitter</string>
+    <string name="titile_activity_timeline">Home Timeline</string>
+    <string name="title_activity_timeline">TimelineActivity</string>
+    <string name="tweetBody">Tweet Body</string>
+    <string name="username">Username</string>
+    <string name="timestamp">timestamp</string>
+    <string name="cancel">Cancel</string>
+    <string name="composeTweet">Tweet</string>
+    <string name="usernameOther">\@UserName</string>
+</resources>
