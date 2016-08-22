@@ -3,20 +3,17 @@ package com.codepath.apps.mytweets.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
-import com.codepath.apps.mytweets.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.mytweets.R;
 import com.codepath.apps.mytweets.TwitterApplication;
 import com.codepath.apps.mytweets.TwitterClient;
-import com.codepath.apps.mytweets.adapter.TweetsArrayAdapter;
 import com.codepath.apps.mytweets.adapter.TweetsRecycleAdapter;
+import com.codepath.apps.mytweets.fragments.TweetsListFragment;
 import com.codepath.apps.mytweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -29,15 +26,17 @@ import cz.msebera.android.httpclient.Header;
 
 public class TimelineActivity extends AppCompatActivity {
 
+    private TweetsListFragment fragmentTweets;
+
     private TwitterClient client;
-    private TweetsArrayAdapter aTweets;
+    //private TweetsArrayAdapter aTweets;
     private ArrayList<Tweet> tweets;
-    private ListView lvTweets;
+   // private ListView lvTweets;
     private final int REQUEST_CODE = 200;
     private RecyclerView recyclerView;
     private TweetsRecycleAdapter recycleAdapter;
 
-    private long lastSince_Id = 0;
+    //private long lastSince_Id = 0;
 
 
     @Override
@@ -66,7 +65,7 @@ public class TimelineActivity extends AppCompatActivity {
 
 
         //endless scrolling using Recycleview
-        recyclerView = (RecyclerView)findViewById(R.id.recycleView);
+        /*recyclerView = (RecyclerView)findViewById(R.id.recycleView);
 
         recycleAdapter = new TweetsRecycleAdapter(this.getApplicationContext(),tweets);
         recyclerView.setAdapter(recycleAdapter);
@@ -81,12 +80,18 @@ public class TimelineActivity extends AppCompatActivity {
                 customLoadMoreDataFromApi(page++);
             }
 
-        });
+        });*/
 
+        //populateTimeline(1);
+
+            if(savedInstanceState== null) {
+                fragmentTweets = (TweetsListFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.fragment_timeline);
+            }
         populateTimeline(1);
     }
 
-    @Override
+   @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //return super.onCreateOptionsMenu(menu_main);
         getMenuInflater().inflate(R.menu.menu_main,menu);
@@ -125,11 +130,15 @@ public class TimelineActivity extends AppCompatActivity {
             int code = data.getExtras().getInt("code", 0);
 
             tweets.add(0,tweet);
+            fragmentTweets.add(tweet);
+           // recycleAdapter.notifyItemInserted(0);
+
+
 
            // aTweets.insert(tweet,0);
            // aTweets.notifyDataSetChanged();
 
-            recycleAdapter.notifyItemInserted(0);
+
         }
     }
 
@@ -148,23 +157,19 @@ public class TimelineActivity extends AppCompatActivity {
 
                 ArrayList<Tweet> arrayList = Tweet.fromJsonArray(json);
 
-                tweets.addAll(arrayList);
-                Log.d("DEBUG","getHomeTimeline tweets:"+ tweets.toString());
+               // tweets.addAll(arrayList);
+                fragmentTweets.addAll(arrayList);
 
 
                 //  aTweets.addAll(tweets);
-              //  aTweets.notifyDataSetChanged();
-                int curSize = recycleAdapter.getItemCount();
-                Log.d("DEBUG", "Recycle adapter Size before:" + curSize);
+               //  aTweets.notifyDataSetChanged();
 
-                recycleAdapter.notifyItemRangeInserted(curSize, tweets.size());
+               // int curSize = recycleAdapter.getItemCount();
 
-                Log.d("DEBUG", "Recycle adapter Size After:" + recycleAdapter.getItemCount());
-                Log.d("DEBUG","getHomeTimeline with recycleAdapter:"+ recycleAdapter.toString());
-
+               // recycleAdapter.notifyItemRangeInserted(curSize, tweets.size());
 
                 //get last tweet's id
-               /* if(tweets.size() > 0) {
+              /* if(tweets.size() > 0) {
                     lastSince_Id = arrayList.get((arrayList.size() - 1)).getUid();
                     Log.d("DEBUG","tweet size:"+arrayList.size());
                     Log.d("DEBUG","last since_id:"+lastSince_Id);
