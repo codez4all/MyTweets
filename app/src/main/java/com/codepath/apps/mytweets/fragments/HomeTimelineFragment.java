@@ -1,27 +1,52 @@
 package com.codepath.apps.mytweets.fragments;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.codepath.apps.mytweets.EndlessRecyclerViewScrollListener;
+import com.codepath.apps.mytweets.TwitterApplication;
+import com.codepath.apps.mytweets.TwitterClient;
+import com.codepath.apps.mytweets.models.Tweet;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
+
 /**
  * Created by sheetal on 8/17/16.
  */
 public class HomeTimelineFragment extends TweetsListFragment {
 
-  /* private TwitterClient client;
+
+
+    private TwitterClient client;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        View v =  super.onCreateView(inflater, container, savedInstanceState);
+
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
 
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
+                Log.d("DEBUG","In add on Scroll Listener"+ page);
                 customLoadMoreDataFromApi(page++);
             }
 
         });
 
-        return super.onCreateView(inflater, container, savedInstanceState);
-
+        return v;
     }
 
     @Override
@@ -29,17 +54,17 @@ public class HomeTimelineFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
 
         client = TwitterApplication.getRestClient(); //singletone client
-
         populateTimeline(1);
 
     }
 
+
     //send api request to get timeline Json
     // fill the ListView by creating tweet objects from Json.
-    public void populateTimeline(int page) {
+    private void populateTimeline(int page) {
 
         Log.d("DEBUG", "Page: " + page);
-        client.getHomeTimeline(new JsonHttpResponseHandler(){
+        client.getHomeTimeline(new JsonHttpResponseHandler() {
 
             //Success
             @Override
@@ -49,25 +74,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
 
                 ArrayList<Tweet> arrayList = Tweet.fromJsonArray(json);
 
-                // tweets.addAll(arrayList);
                 addAll(arrayList);
-
-
-                //  aTweets.addAll(tweets);
-                //  aTweets.notifyDataSetChanged();
-
-                // int curSize = recycleAdapter.getItemCount();
-
-                // recycleAdapter.notifyItemRangeInserted(curSize, tweets.size());
-
-                //get last tweet's id
-                if(tweets.size() > 0) {
-                    lastSince_Id = arrayList.get((arrayList.size() - 1)).getUid();
-                    Log.d("DEBUG","tweet size:"+arrayList.size());
-                    Log.d("DEBUG","last since_id:"+lastSince_Id);
-
-                }
-
 
             }
 
@@ -78,7 +85,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
 
                 Log.d("DEBUG", errorResponse.toString());
             }
-        },page);
+        }, page);
 
     }
 
@@ -87,9 +94,8 @@ public class HomeTimelineFragment extends TweetsListFragment {
         //  --> Deserialize API response and then construct new objects to append to the adapter
         //  --> Notify the adapter of the changes
 
-        populateTimeline(page);
+          populateTimeline(page);
 
-    }*/
-
+    }
 
 }

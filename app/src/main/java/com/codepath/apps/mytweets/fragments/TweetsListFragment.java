@@ -38,15 +38,6 @@ public class TweetsListFragment extends Fragment{
         linearLayoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-       /* recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                customLoadMoreDataFromApi(page++);
-            }
-
-        });*/
-
         return v;
     }
 
@@ -70,7 +61,7 @@ public class TweetsListFragment extends Fragment{
 
     }
 
-    public void addAll(ArrayList<Tweet> tweetz)
+    protected void addAll(ArrayList<Tweet> tweetz)
     {
         this.tweets.addAll(tweetz);
 
