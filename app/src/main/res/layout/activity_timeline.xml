@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.codepath.apps.mytweets.activity.TimelineActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:weightSum="1">
 
 
@@ -18,16 +19,30 @@
         android:background="#0caef8">
     </android.support.v7.widget.Toolbar>
 
-    <fragment
+
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
+        app:pstsShouldExpand="true"
+        app:pstsTextAllCaps="true"
+        android:layout_width="match_parent"
+        android:layout_height="48dp" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white" />
+
+
+  <!--  <fragment
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:name="com.codepath.apps.mytweets.fragments.HomeTimelineFragment"
+        android:name="com.codepath.apps.mytweets.fragments.MentionsTimelineFragment"
         android:id="@+id/fragment_timeline"
         android:layout_gravity="center_horizontal"
-        tools:layout="@layout/fragment_tweets_list"/>
+        tools:layout="@layout/fragment_tweets_list"/> -->
 
-
-    <!--<ListView
+    <!-- <ListView
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:id="@+id/lvTweets"

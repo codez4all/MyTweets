@@ -1,13 +1,8 @@
 package com.codepath.apps.mytweets.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.codepath.apps.mytweets.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.mytweets.TwitterApplication;
 import com.codepath.apps.mytweets.TwitterClient;
 import com.codepath.apps.mytweets.models.Tweet;
@@ -21,48 +16,26 @@ import java.util.ArrayList;
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by sheetal on 8/17/16.
+ * Created by sheetal on 8/22/16.
  */
-public class HomeTimelineFragment extends TweetsListFragment {
+public class MentionsTimelineFragment extends TweetsListFragment {
 
     private TwitterClient client;
-
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View v =  super.onCreateView(inflater, container, savedInstanceState);
-
-        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                Log.d("DEBUG","In add on Scroll Listener"+ page);
-                populateTimeline(page++);
-            }
-
-        });
-
-        return v;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         client = TwitterApplication.getRestClient(); //singletone client
-        populateTimeline(1);
-
+        mentionsTimeline();
     }
 
 
     //send api request to get timeline Json
     // fill the ListView by creating tweet objects from Json.
-    private void populateTimeline(int page) {
+    private void mentionsTimeline() {
 
-        Log.d("DEBUG", "Page: " + page);
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+        client.getMentionsTimeline(new JsonHttpResponseHandler() {
 
             //Success
             @Override
@@ -83,7 +56,10 @@ public class HomeTimelineFragment extends TweetsListFragment {
 
                 Log.d("DEBUG", errorResponse.toString());
             }
-        }, page);
+        });
+
     }
+
+
 
 }
