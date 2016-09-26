@@ -40,11 +40,26 @@ public class User implements Serializable {
         return profileImageUrl;
     }
 
+    public String getTagline() {
+        return tagline;
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
+    }
+
+    public int getFriendsCount() {
+        return followingCount;
+    }
+
     //List the attributes
     private  String name;
     private  long uid;
     private  String screenName;
     private  String profileImageUrl;
+    private  String tagline;
+    private  int followersCount;
+    private  int followingCount;
 
     public static User fromJason(JSONObject jsonObject)
     {
@@ -55,6 +70,9 @@ public class User implements Serializable {
             user.uid = jsonObject.getLong("id_str");
             user.screenName = jsonObject.getString("screen_name");
             user.profileImageUrl = jsonObject.getString("profile_image_url");
+            user.tagline = jsonObject.getString("description");
+            user.followersCount = jsonObject.getInt("followers_count");
+            user.followingCount = jsonObject.getInt("friends_count");
 
         }catch (JSONException e)
         {

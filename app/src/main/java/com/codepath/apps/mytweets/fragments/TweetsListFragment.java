@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,6 @@ public class TweetsListFragment extends Fragment{
     }
 
 
-
     public void add(Tweet tweet)
     {
         tweets.add(0, tweet);
@@ -61,13 +61,18 @@ public class TweetsListFragment extends Fragment{
 
     }
 
-    protected void addAll(ArrayList<Tweet> tweetz)
+    protected void addAll(ArrayList<Tweet> newTweets)
     {
-        this.tweets.addAll(tweetz);
 
         int curSize = recycleAdapter.getItemCount();
+        Log.d("DEBUG","RecycleAdapter Current Size Before :" + curSize);
 
-        recycleAdapter.notifyItemRangeInserted(curSize, tweets.size());
+        tweets.addAll(newTweets);
+        recycleAdapter.notifyItemRangeInserted(curSize, newTweets.size());
+
+
+        curSize = recycleAdapter.getItemCount();
+        Log.d("DEBUG", "RecycleAdapter Current Size After:" + curSize);
 
     }
 }

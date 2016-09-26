@@ -1,11 +1,13 @@
-package com.codepath.apps.mytweets.activity;
+package com.codepath.apps.mytweets.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,29 +23,42 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
-public class ComposeActivity extends AppCompatActivity {
 
+public class ComposeDialogFragment extends DialogFragment {
+
+    EditText etText;
+    TextView tvUserName;
+    Button btnTweet;
     private TwitterClient client;
-    private Tweet tweet;
+
+    public  static ComposeDialogFragment newInstance()
+    {
+        ComposeDialogFragment dialogFragment = new ComposeDialogFragment();
+        return  dialogFragment;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return  inflater.inflate(R.layout.fragment_compose,container);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        etText = (EditText) view.findViewById(R.id.etTweetBody);
+        tvUserName = (TextView) view.findViewById(R.id.tvUsernameCompose);
+        btnTweet = (Button)view.findViewById(R.id.btnTweet);
+
+        etText.requestFocus();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose);
-
-        Toolbar toolbarCompose = (Toolbar)findViewById(R.id.toolbarCompose);
-        toolbarCompose.setTitle("Compose Tweet");
-
-        setSupportActionBar(toolbarCompose);
 
         client = TwitterApplication.getRestClient(); //singletone client
-        tweet = new Tweet();
-
-        // String userName =  getIntent().getStringExtra("UserName");
-        TextView tvUsername =  (TextView)findViewById(R.id.tvUsernameCompose);
-        // tvUsername.setText(ParseUser.getCurrentUser().getUsername().toString());
-
-        Button btnTweet = (Button)findViewById(R.id.btnTweet);
 
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,13 +67,10 @@ public class ComposeActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     public  void  composeTweet()
     {
-        EditText tweetText = (EditText)findViewById(R.id.etTweetBody);
-
 
         client.updateHomeTime(new AsyncHttpResponseHandler() {
 
@@ -72,19 +84,18 @@ public class ComposeActivity extends AppCompatActivity {
                     JSONObject jsonObject= new JSONObject(new String(responseBody));
                     Log.d("DEBUG","Tweet Object"+jsonObject.toString());
 
-                    tweet = Tweet.fromJson(jsonObject);
+                    Tweet tweet = Tweet.fromJson(jsonObject);
                     // Pass relevant data back as a result
                     data.putExtra("newTweet", tweet);
                     data.putExtra("code", 200); // ints work too
-                    setResult(RESULT_OK,data);
-                    finish();
+
                 }
                 catch (JSONException e)
                 {
                     e.printStackTrace();
                 }
 
-               // JSONObject jsonObject =(JSONObject) responseBody;
+                // JSONObject jsonObject =(JSONObject) responseBody;
             }
 
             @Override
@@ -92,10 +103,8 @@ public class ComposeActivity extends AppCompatActivity {
                 Log.d("DEBUG","Tweet post failed- Error="+error.toString());
 
             }
-        },tweetText.getText().toString());
+        },etText.getText().toString());
 
     }
-
-
 
 }

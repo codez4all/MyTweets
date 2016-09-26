@@ -51,6 +51,8 @@
         </activity>
         <activity android:name=".activity.ComposeActivity">
         </activity>
+        <activity android:name=".activity.ProfileActivity">
+        </activity>
     </application>
 
 </manifest>

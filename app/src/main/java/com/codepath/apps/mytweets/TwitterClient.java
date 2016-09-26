@@ -42,7 +42,14 @@ public class TwitterClient extends OAuthBaseClient {
 		client.get(apiUrl, params, handler);
 	}
 
-
+/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
+	 * 	  i.e getApiUrl("statuses/home_timeline.json");
+	 * 2. Define the parameters to pass to the request (query or body)
+	 *    i.e RequestParams params = new RequestParams("foo", "bar");
+	 * 3. Define the request method and make a call to the client
+	 *    i.e client.get(apiUrl, params, handler);
+	 *    i.e client.post(apiUrl, params, handler);
+	 */
 
     // Method == EndPoint
 
@@ -65,14 +72,6 @@ public class TwitterClient extends OAuthBaseClient {
 
     }
 
-	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
-	 * 	  i.e getApiUrl("statuses/home_timeline.json");
-	 * 2. Define the parameters to pass to the request (query or body)
-	 *    i.e RequestParams params = new RequestParams("foo", "bar");
-	 * 3. Define the request method and make a call to the client
-	 *    i.e client.get(apiUrl, params, handler);
-	 *    i.e client.post(apiUrl, params, handler);
-	 */
 
     //Post new tweet
     public void updateHomeTime(AsyncHttpResponseHandler handler, String tweetText)
@@ -92,9 +91,27 @@ public class TwitterClient extends OAuthBaseClient {
         RequestParams params = new RequestParams();
         params.put("count",25);
         params.put("since_id", 1);
-
         //Execute the request
         getClient().get(apiUrl, params, handler);
+    }
+
+    public void getUserTimeline(String screenName, AsyncHttpResponseHandler handler)
+    {
+        String apiUrl = getApiUrl("statuses/user_timeline.json");
+        //Specify the params
+        RequestParams params = new RequestParams();
+        params.put("count",25);
+        params.put("screen_name", screenName);
+        //Execute the request
+        getClient().get(apiUrl, params, handler);
+    }
+
+
+    public void getUserInfo(AsyncHttpResponseHandler handler)
+    {
+        String apiUrl = getApiUrl("account/verify_credentials.json");
+        //Execute the request
+        getClient().get(apiUrl, null, handler);
     }
 
 }
