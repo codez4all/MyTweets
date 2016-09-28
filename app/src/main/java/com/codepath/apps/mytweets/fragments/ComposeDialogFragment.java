@@ -1,6 +1,6 @@
 package com.codepath.apps.mytweets.fragments;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -10,13 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.mytweets.R;
 import com.codepath.apps.mytweets.TwitterApplication;
 import com.codepath.apps.mytweets.TwitterClient;
 import com.codepath.apps.mytweets.models.Tweet;
+import com.codepath.apps.mytweets.models.User;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,14 +28,21 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 
-public class ComposeDialogFragment extends DialogFragment {
+public class ComposeDialogFragment extends DialogFragment  {
 
-    EditText etText;
+    EditText etNewWeet;
     TextView tvUserName;
     Button btnTweet;
-    private TwitterClient client;
+    Button btnCancel;
+    ImageView ivProfileImageCompose;
+    User user;
 
-    public  static ComposeDialogFragment newInstance()
+
+
+    private TwitterClient client;
+    private ComposeDialogListener mListener;
+
+    public static ComposeDialogFragment newInstance()
     {
         ComposeDialogFragment dialogFragment = new ComposeDialogFragment();
         return  dialogFragment;
@@ -47,11 +58,30 @@ public class ComposeDialogFragment extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        etText = (EditText) view.findViewById(R.id.etTweetBody);
+        etNewWeet = (EditText) view.findViewById(R.id.etTweetBody);
         tvUserName = (TextView) view.findViewById(R.id.tvUsernameCompose);
+        ivProfileImageCompose = (ImageView) view.findViewById(R.id.ivProfileImageCompose);
         btnTweet = (Button)view.findViewById(R.id.btnTweet);
+        btnCancel = (Button) view.findViewById(R.id.btnCancel);
 
-        etText.requestFocus();
+        etNewWeet.requestFocus();
+
+        //on Tweet button click
+        btnTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                composeTweet();
+                dismiss();
+            }
+        });
+
+        //cancel button click
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
     }
 
     @Override
@@ -60,14 +90,28 @@ public class ComposeDialogFragment extends DialogFragment {
 
         client = TwitterApplication.getRestClient(); //singletone client
 
-        btnTweet.setOnClickListener(new View.OnClickListener() {
+        client.getUserInfo(new JsonHttpResponseHandler(){
             @Override
-            public void onClick(View v) {
-                composeTweet();
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+
+                user = User.fromJason(response);
+                //set username
+                tvUserName.setText(user.getScreenName());
+                //set profile image
+                Picasso.with(getContext()).load(user.getProfileImageUrl()).into(ivProfileImageCompose);
+
             }
+            @Override
+            public void onFailure(int statusCode,  cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+
+                Log.d("DEBUG", errorResponse.toString());
+            }
+
         });
 
-    }
+        }
 
     public  void  composeTweet()
     {
@@ -77,17 +121,19 @@ public class ComposeDialogFragment extends DialogFragment {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                Intent data = new Intent();
+
                 Log.d("DEBUG", "Tweet Successfully posted - response=" + responseBody.toString());
-                //data.putExtra("respose")
+
                 try {
                     JSONObject jsonObject= new JSONObject(new String(responseBody));
                     Log.d("DEBUG","Tweet Object"+jsonObject.toString());
 
                     Tweet tweet = Tweet.fromJson(jsonObject);
-                    // Pass relevant data back as a result
-                    data.putExtra("newTweet", tweet);
-                    data.putExtra("code", 200); // ints work too
+
+                    if(mListener !=null) {
+                        mListener.onFinishComposeDialog(tweet);
+
+                    }
 
                 }
                 catch (JSONException e)
@@ -95,7 +141,6 @@ public class ComposeDialogFragment extends DialogFragment {
                     e.printStackTrace();
                 }
 
-                // JSONObject jsonObject =(JSONObject) responseBody;
             }
 
             @Override
@@ -103,8 +148,37 @@ public class ComposeDialogFragment extends DialogFragment {
                 Log.d("DEBUG","Tweet post failed- Error="+error.toString());
 
             }
-        },etText.getText().toString());
+        },etNewWeet.getText().toString());
 
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if(context instanceof ComposeDialogListener)
+        {
+            mListener = (ComposeDialogListener) context;
+        }
+        else
+        {
+            throw new RuntimeException(context.toString()
+            + " must implement OnFinishComposeDialog");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    // Defines the listener interface
+    public interface ComposeDialogListener {
+
+        void onFinishComposeDialog(Tweet newTweet);
+
+    }
+
 
 }

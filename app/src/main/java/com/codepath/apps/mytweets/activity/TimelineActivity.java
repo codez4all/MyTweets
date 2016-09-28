@@ -24,15 +24,13 @@ import com.codepath.apps.mytweets.fragments.MentionsTimelineFragment;
 import com.codepath.apps.mytweets.fragments.TweetsListFragment;
 import com.codepath.apps.mytweets.models.Tweet;
 
-import java.util.ArrayList;
-
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity
+          implements ComposeDialogFragment.ComposeDialogListener{
 
     private TweetsListFragment fragmentTweets;
 
-    private ArrayList<Tweet> tweets;
     private final int REQUEST_CODE = 200;
 
     private ViewPager viewPager;
@@ -63,12 +61,9 @@ public class TimelineActivity extends AppCompatActivity {
         tabStrip.setViewPager(viewPager);
 
 
-        //Create arraylist
-        tweets = new ArrayList<>();
-      /* if(savedInstanceState== null) {
-            fragmentTweets = (TweetsListFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.fragment_timeline);
-        }*/
+       if(savedInstanceState== null) {
+            fragmentTweets = new TweetsListFragment();
+        }
     }
 
    @Override
@@ -81,10 +76,10 @@ public class TimelineActivity extends AppCompatActivity {
         DrawableCompat.setTint(drawable, ContextCompat.getColor(this, R.color.colorLightGray));
         menu.findItem(R.id.miCompose).setIcon(drawable);
 
-       Drawable drawable2 = menu.findItem(R.id.miProfile).getIcon();
-       drawable2 = DrawableCompat.wrap(drawable2);
-       DrawableCompat.setTint(drawable2, ContextCompat.getColor(this, R.color.colorLightGray));
-       menu.findItem(R.id.miProfile).setIcon(drawable2);
+        Drawable drawable2 = menu.findItem(R.id.miProfile).getIcon();
+        drawable2 = DrawableCompat.wrap(drawable2);
+        DrawableCompat.setTint(drawable2, ContextCompat.getColor(this, R.color.colorLightGray));
+        menu.findItem(R.id.miProfile).setIcon(drawable2);
 
         return  true;
     }
@@ -97,51 +92,27 @@ public class TimelineActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
 
-
-            // Log.d("DEBUG",ParseUser.getCurrentUser().toString());
-           // i.putExtra("UserName", ParseUser.getCurrentUser().getUsername());
-
            // call Compose activity on compose icon click in toolbar
            case R.id.miCompose: {
-               /*Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
-               startActivityForResult(i, REQUEST_CODE);
-               */
-
-             FragmentManager fm = getSupportFragmentManager();
+               FragmentManager fm = getSupportFragmentManager();
                ComposeDialogFragment composeDialogFragment = ComposeDialogFragment.newInstance();
                composeDialogFragment.show(fm,"fragment_compose");
-
            }
 
+            case R.id.miProfile: {
+                onProfileView(item);
+
+            }
+
            default:
-           return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected(item);
        }
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-       // super.onActivityResult(requestCode, resultCode, data);
-        // REQUEST_CODE is defined above
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            // Extract name value from result extras
-            Tweet tweet = (Tweet)data.getSerializableExtra("newTweet");
-            int code = data.getExtras().getInt("code", 0);
-
-           // tweets.add(0,tweet);
-           // fragmentTweets.add(tweet);
-
-           // recycleAdapter.notifyItemInserted(0);
-           // aTweets.insert(tweet,0);
-           // aTweets.notifyDataSetChanged();
-        }
-    }
-
-
     public void onProfileView(MenuItem item) {
-        Intent iProfile = new Intent(TimelineActivity.this,ProfileActivity.class);
 
-      //  iProfile.putExtra("screen_name","smw25");
+        Intent iProfile = new Intent(TimelineActivity.this,ProfileActivity.class);
         startActivity(iProfile);
 
     }
@@ -186,4 +157,11 @@ public class TimelineActivity extends AppCompatActivity {
     super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
   }
 
+    @Override
+    public void onFinishComposeDialog(Tweet newTweet) {
+
+        Log.d("DEBUG", "New Tweet received"+ newTweet.getBody());
+        fragmentTweets.add(newTweet);
+
+    }
 }

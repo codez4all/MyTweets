@@ -23,7 +23,7 @@ import cz.msebera.android.httpclient.Header;
 /**
  * Created by sheetal on 8/17/16.
  */
-public class HomeTimelineFragment extends TweetsListFragment {
+public class HomeTimelineFragment extends TweetsListFragment implements ComposeDialogFragment.ComposeDialogListener {
 
     private TwitterClient client;
 
@@ -86,4 +86,12 @@ public class HomeTimelineFragment extends TweetsListFragment {
         }, page);
     }
 
+
+    @Override
+    public void onFinishComposeDialog(Tweet newTweet) {
+
+        Log.d("DEBUG", "New Tweet received"+ newTweet.getBody());
+        add(newTweet);
+
+    }
 }

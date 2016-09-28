@@ -46,7 +46,6 @@ public class ProfileActivity extends AppCompatActivity {
 
                 getSupportActionBar().setTitle("@" + user.getScreenName());
                 populateProfileHeader(user);
-
             }
 
 
@@ -59,23 +58,18 @@ public class ProfileActivity extends AppCompatActivity {
 
         });
 
-
-        //get the screen_name
-
-        //String screenName = user.getScreenName();
-        String screenName = getIntent().getStringExtra("screen_name");
-
-        Log.d("DEBUG","Screen_Name in ProfileActivity "+ screenName);
-
-        if(savedInstanceState == null)
+      //  if(user!=null)
         {
 
-            //create usertimeline fragment
-            UserTimelineFragment fragmentUser = UserTimelineFragment.newInstance(screenName);
-            //Display user fragment within activity dynamically
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.flContainer, fragmentUser);
-            ft.commit();
+            if(savedInstanceState == null)
+            {
+                //create usertimeline fragment
+                UserTimelineFragment fragmentUser = UserTimelineFragment.newInstance("smw25");
+                //Display user fragment within activity dynamically
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.flContainer, fragmentUser);
+                ft.commit();
+            }
         }
     }
 
