@@ -9,4 +9,17 @@
     </style>
 
 
+    <style name="TweetBodyStyle">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+    </style>
+
+    <style name="TweetDateStyle">
+        <item name="android:textColor">@color/colorTextDarkGray</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+    </style>
+
+
 </resources>

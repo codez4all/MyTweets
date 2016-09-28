@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-     android:layout_height="wrap_content"
-     android:layout_width="match_parent">
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:paddingTop="5dp">
+    xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="5dp">
 
 
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:id="@+id/ivProfileImage"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -38,30 +34,96 @@
         android:lineSpacingExtra="25dp"/>
 
     <TextView
+        android:id="@+id/tvBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tweetBody"
-        android:id="@+id/tvBody"
+        android:paddingLeft="10dp"
+        android:paddingBottom="10dp"
         android:layout_toRightOf="@+id/ivProfileImage"
         android:layout_below="@+id/tvUserName"
-        android:textStyle="normal"
-        android:textColor="@android:color/black"
-        android:visibility="visible"
-        android:paddingLeft="10dp"
-        android:paddingTop="0.5dp"
-        android:paddingBottom="10dp"
         android:lineSpacingExtra="1dp"
+        style="@style/TweetBodyStyle"
+        tools:text="@string/tweetBody"
         />
 
     <TextView
+        android:id="@+id/tvTimeStamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/timestamp"
-        android:id="@+id/tvTimeStamp"
+        tools:text="@string/timestamp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:textColor="@android:color/black"/>
+        style="@style/TweetDateStyle"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        android:layout_below="@+id/tvBody"
+        android:orientation="horizontal"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:paddingBottom="10dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/reply"
+            android:tint="@color/colorIconTint"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/twitter_retweet"
+                android:tint="@color/colorIconTint"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="2dp"
+                android:layout_gravity="center_vertical"
+                android:text="4"
+                android:textColor="@color/colorTextDarkGray"
+                android:gravity="center_vertical"
+                />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tint="@color/colorIconTint"
+                android:src="@drawable/heart"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="2dp"
+                android:layout_gravity="center_vertical"
+                android:text="212"
+                android:textColor="@color/colorTextDarkGray"
+                android:gravity="center_vertical"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 </RelativeLayout>
-</LinearLayout>
