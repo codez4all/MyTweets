@@ -1,19 +1,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
     <item
         android:id="@+id/miCompose"
-        android:icon="@drawable/ic_compose"
-        app:showAsAction="ifRoom"
-        android:title="Compose">
+        android:icon="@drawable/message_plus"
+        app:showAsAction="always"
+        android:title="Compose"
+        android:orderInCategory="10">
     </item>
 
 
     <item
         android:id="@+id/miProfile"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_profile"
+        app:showAsAction="always"
+        android:icon="@drawable/account"
         android:title="Profile"
-        android:onClick="onProfileView">
+        android:onClick="onProfileView"
+        android:orderInCategory="11">
     </item>
+
 
 </menu>

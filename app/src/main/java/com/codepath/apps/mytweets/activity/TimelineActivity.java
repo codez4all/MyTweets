@@ -1,10 +1,14 @@
 package com.codepath.apps.mytweets.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +25,8 @@ import com.codepath.apps.mytweets.fragments.TweetsListFragment;
 import com.codepath.apps.mytweets.models.Tweet;
 
 import java.util.ArrayList;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class TimelineActivity extends AppCompatActivity {
 
@@ -39,9 +45,9 @@ public class TimelineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
-       Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //Get ViewPager
 
@@ -69,6 +75,17 @@ public class TimelineActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //return super.onCreateOptionsMenu(menu_main);
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        Drawable drawable = menu.findItem(R.id.miCompose).getIcon();
+        drawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(this, R.color.colorLightGray));
+        menu.findItem(R.id.miCompose).setIcon(drawable);
+
+       Drawable drawable2 = menu.findItem(R.id.miProfile).getIcon();
+       drawable2 = DrawableCompat.wrap(drawable2);
+       DrawableCompat.setTint(drawable2, ContextCompat.getColor(this, R.color.colorLightGray));
+       menu.findItem(R.id.miProfile).setIcon(drawable2);
+
         return  true;
     }
 
@@ -164,5 +181,9 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
 
+  @Override
+  protected void attachBaseContext(Context newBase) {
+    super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+  }
 
 }
