@@ -2,7 +2,6 @@ package com.codepath.apps.mytweets;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 
 import com.codepath.apps.mytweets.activity.TimelineActivity;
@@ -19,14 +18,6 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 				View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 						| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-	}
-
-
-	// Inflate the menu_main; this adds items to the action bar if it is present.
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.login, menu);
-		return true;
 	}
 
 	// OAuth authenticated successfully, launch primary authenticated activity
