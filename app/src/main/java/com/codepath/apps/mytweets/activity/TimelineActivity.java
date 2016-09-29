@@ -97,10 +97,7 @@ public class TimelineActivity extends AppCompatActivity
            case R.id.miCompose: {
                FragmentManager fm = getSupportFragmentManager();
                ComposeDialogFragment composeDialogFragment = ComposeDialogFragment.newInstance();
-
                composeDialogFragment.show(fm,"fragment_compose");
-
-
            }
             break;
             case R.id.miProfile: {
@@ -164,11 +161,7 @@ public class TimelineActivity extends AppCompatActivity
     @Override
     public void onFinishComposeDialog(Tweet newTweet) {
 
-
-        Log.d("DEBUG", "New Tweet received"+ newTweet.getBody());
-        //fragmentTweets.add(newTweet);
-
+        // TimelineActivity sends newTweet to HomeTimelineFragment through method
         instanceHomeTimelineFrag.addNewTweet(newTweet);
-
     }
 }

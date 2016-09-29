@@ -40,7 +40,7 @@ public class ComposeDialogFragment extends DialogFragment  {
     Button btnCancel;
     ImageView ivProfileImageCompose;
     User user;
-
+    private Tweet newTweet;
 
 
     private TwitterClient client;
@@ -50,6 +50,11 @@ public class ComposeDialogFragment extends DialogFragment  {
     {
         ComposeDialogFragment dialogFragment = new ComposeDialogFragment();
         return  dialogFragment;
+    }
+
+    public ComposeDialogFragment()
+    {
+        //empty constructor
     }
 
     @NonNull
@@ -85,7 +90,7 @@ public class ComposeDialogFragment extends DialogFragment  {
             @Override
             public void onClick(View v) {
                 composeTweet();
-                dismiss();
+                //dismiss();
             }
         });
 
@@ -123,7 +128,7 @@ public class ComposeDialogFragment extends DialogFragment  {
 
         }
 
-    public  void  composeTweet()
+    public void composeTweet()
     {
 
         client.updateHomeTime(new AsyncHttpResponseHandler() {
@@ -138,17 +143,22 @@ public class ComposeDialogFragment extends DialogFragment  {
                     JSONObject jsonObject= new JSONObject(new String(responseBody));
                     Log.d("DEBUG","Tweet Object"+jsonObject.toString());
 
-                    Tweet tweet = Tweet.fromJson(jsonObject);
-
-                    if(mListener !=null) {
-                        mListener.onFinishComposeDialog(tweet);
-
-                    }
+                    newTweet = Tweet.fromJson(jsonObject);
 
                 }
                 catch (JSONException e)
                 {
                     e.printStackTrace();
+                }
+                finally {
+
+                    // send newTweet to Parent activity - TimelineActivity
+                     if(mListener !=null && newTweet !=null) {
+
+                         mListener.onFinishComposeDialog(newTweet);
+                         dismiss(); // close dialogfragment
+
+                    }
                 }
 
             }
@@ -189,6 +199,5 @@ public class ComposeDialogFragment extends DialogFragment  {
         void onFinishComposeDialog(Tweet newTweet);
 
     }
-
 
 }

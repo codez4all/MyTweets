@@ -90,5 +90,6 @@ public class HomeTimelineFragment extends TweetsListFragment  {
     public void addNewTweet(Tweet newTweet)
     {
         add(newTweet);
+        Log.d("DEBUG","In method addNewTweet - HomeTimeline Fragment ");
     }
 }

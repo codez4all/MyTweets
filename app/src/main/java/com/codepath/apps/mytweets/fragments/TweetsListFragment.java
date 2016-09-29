@@ -56,20 +56,16 @@ public class TweetsListFragment extends Fragment{
     public void add(Tweet tweet)
     {
         tweets.add(0, tweet);
-
         recycleAdapter.notifyItemInserted(0);
-
     }
 
     protected void addAll(ArrayList<Tweet> newTweets)
     {
-
         int curSize = recycleAdapter.getItemCount();
         Log.d("DEBUG","RecycleAdapter Current Size Before :" + curSize);
 
         tweets.addAll(newTweets);
         recycleAdapter.notifyItemRangeInserted(curSize, newTweets.size());
-
 
         curSize = recycleAdapter.getItemCount();
         Log.d("DEBUG", "RecycleAdapter Current Size After:" + curSize);
