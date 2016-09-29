@@ -21,7 +21,6 @@ import com.codepath.apps.mytweets.R;
 import com.codepath.apps.mytweets.fragments.ComposeDialogFragment;
 import com.codepath.apps.mytweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mytweets.fragments.MentionsTimelineFragment;
-import com.codepath.apps.mytweets.fragments.TweetsListFragment;
 import com.codepath.apps.mytweets.models.Tweet;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -29,12 +28,14 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class TimelineActivity extends AppCompatActivity
           implements ComposeDialogFragment.ComposeDialogListener{
 
-    private TweetsListFragment fragmentTweets;
+    //private TweetsListFragment fragmentTweets;
 
     private final int REQUEST_CODE = 200;
 
     private ViewPager viewPager;
     private PagerSlidingTabStrip tabStrip;
+
+    HomeTimelineFragment instanceHomeTimelineFrag;
 
 
 
@@ -61,9 +62,9 @@ public class TimelineActivity extends AppCompatActivity
         tabStrip.setViewPager(viewPager);
 
 
-       if(savedInstanceState== null) {
+      /* if(savedInstanceState== null) {
             fragmentTweets = new TweetsListFragment();
-        }
+        }*/
     }
 
    @Override
@@ -132,7 +133,8 @@ public class TimelineActivity extends AppCompatActivity
         public Fragment getItem(int position) {
             if(position==0)
             {
-                return  new HomeTimelineFragment();
+                instanceHomeTimelineFrag = new HomeTimelineFragment();
+                return  instanceHomeTimelineFrag;
             }
             else if(position ==1)
             {
@@ -164,7 +166,9 @@ public class TimelineActivity extends AppCompatActivity
 
 
         Log.d("DEBUG", "New Tweet received"+ newTweet.getBody());
-        fragmentTweets.add(newTweet);
+        //fragmentTweets.add(newTweet);
+
+        instanceHomeTimelineFrag.addNewTweet(newTweet);
 
     }
 }
