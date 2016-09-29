@@ -57,7 +57,7 @@ public class ParseRelativeDate {
                 relativeDate = "new";
             }else{
                 if(words.length > 1){
-                    if(words[0].length() > 1){
+                    if(words[0].length() > 2){
                         relativeDate = String.format("%s %s", words[0], words[1].charAt(0));
                     }else{
                         relativeDate = String.format("%s%s", words[0], words[1].charAt(0));

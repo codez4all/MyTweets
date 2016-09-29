@@ -8,11 +8,12 @@
     <string name="title_activity_timeline">TimelineActivity</string>
     <string name="tweetBody">Tweet Body</string>
     <string name="username">Username</string>
+    <string name="name">Name</string>
     <string name="timestamp">timestamp</string>
     <string name="cancel">Cancel</string>
     <string name="composeTweet">Tweet</string>
     <string name="usernameOther">\@UserName</string>
-    <string name="userTagline">TagLine</string>
+    <string name="userTagline">This is tagline for user, this has to come from twitter if present, else we should hide this.</string>
     <string name="title_activity_user_profile">UserProfileActivity</string>
 
     <!-- TODO: Remove or change this placeholder text -->
