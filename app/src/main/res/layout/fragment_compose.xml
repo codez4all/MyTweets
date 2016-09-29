@@ -1,57 +1,65 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".fragments.ComposeDialogFragment">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="200dp"
+    android:padding="10dp"
+    >
 
-    <RelativeLayout
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/ivProfileImageCompose"
+        android:layout_gravity="left"
+        android:layout_alignParentLeft="true"
+        tools:src="@drawable/ic_launcher"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="8dp"
+        android:id="@+id/etTweetBody"
+        android:layout_below="@id/ivProfileImageCompose"
+        android:hint="@string/tweet"
+        android:minLines="3"
+        android:maxLines="3"
+        android:inputType="textMultiLine"
+        android:gravity="top"
+        tools:ignore="MissingPrefix"
+        fontPath="fonts/RobotoCondensed-Regular.ttf"
+        android:textSize="16sp"
+        />
+
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="4dp"
+        android:text="@string/composeTweet"
+        android:id="@+id/btnTweet"
+        android:textColor="@android:color/white"
+        android:background="@color/colorAccent"
+        android:layout_below="@id/etTweetBody"
+        android:layout_alignParentRight="true"
+        />
+
+
+    <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel"
-            android:id="@+id/btnCancel"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/composeTweet"
-            android:id="@+id/btnTweet"
-            android:layout_gravity="right"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            />
-
-        <ImageView
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:id="@+id/ivProfileImageCompose"
-            android:layout_gravity="left"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/btnCancel"
-            android:src="@drawable/ic_launcher"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvUsernameCompose"
-            android:layout_toRightOf="@id/ivProfileImageCompose"
-            android:layout_below="@id/btnCancel"
-            android:layout_marginTop="25dp"
-            android:text="@string/username"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/etTweetBody"
-            android:layout_gravity="center_horizontal"
-            android:layout_below="@id/ivProfileImageCompose"
-            android:hint="@string/tweet"/>
-
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:id="@+id/tvUsernameCompose"
+        android:text="@string/username"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_above="@+id/etTweetBody"
+        android:layout_toEndOf="@+id/ivProfileImageCompose"
+        tools:ignore="MissingPrefix"
+        fontPath="fonts/RobotoCondensed-Regular.ttf"
+        android:textSize="16sp"/>
 
 
-
-</FrameLayout>
+</RelativeLayout>

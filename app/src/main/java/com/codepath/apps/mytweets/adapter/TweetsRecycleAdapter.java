@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.codepath.apps.mytweets.ParseRelativeDate;
 import com.codepath.apps.mytweets.R;
 import com.codepath.apps.mytweets.models.Tweet;
+import com.codepath.apps.mytweets.utils.TwitterUtil;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
 import java.util.List;
 
@@ -91,12 +91,10 @@ public class TweetsRecycleAdapter extends RecyclerView.Adapter<TweetsRecycleAdap
        // ImageView ivProfile = viewHolder.ivProfileImage;
         viewHolder.ivProfileImage.setImageResource(0);
 
-        final int radius = 5;
-        final int margin = 0;
-        final Transformation transformation = new RoundedCornersTransformation(radius, margin);
+
         Picasso.with(this.getContext())
             .load(tweet.getUser().getProfileImageUrl())
-            .transform(transformation)
+            .transform(TwitterUtil.getRoundedCornersTreansformation())
             .into(viewHolder.ivProfileImage);
 
     }

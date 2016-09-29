@@ -96,17 +96,19 @@ public class TimelineActivity extends AppCompatActivity
            case R.id.miCompose: {
                FragmentManager fm = getSupportFragmentManager();
                ComposeDialogFragment composeDialogFragment = ComposeDialogFragment.newInstance();
-               composeDialogFragment.show(fm,"fragment_compose");
-           }
 
+               composeDialogFragment.show(fm,"fragment_compose");
+
+
+           }
+            break;
             case R.id.miProfile: {
                 onProfileView(item);
-
             }
-
-           default:
-                return super.onOptionsItemSelected(item);
+            break;
        }
+
+      return super.onOptionsItemSelected(item);
     }
 
 
@@ -159,6 +161,7 @@ public class TimelineActivity extends AppCompatActivity
 
     @Override
     public void onFinishComposeDialog(Tweet newTweet) {
+
 
         Log.d("DEBUG", "New Tweet received"+ newTweet.getBody());
         fragmentTweets.add(newTweet);

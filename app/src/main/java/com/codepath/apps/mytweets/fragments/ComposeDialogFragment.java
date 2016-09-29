@@ -1,13 +1,16 @@
 package com.codepath.apps.mytweets.fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,6 +21,7 @@ import com.codepath.apps.mytweets.TwitterApplication;
 import com.codepath.apps.mytweets.TwitterClient;
 import com.codepath.apps.mytweets.models.Tweet;
 import com.codepath.apps.mytweets.models.User;
+import com.codepath.apps.mytweets.utils.TwitterUtil;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
@@ -48,6 +52,17 @@ public class ComposeDialogFragment extends DialogFragment  {
         return  dialogFragment;
     }
 
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+
+        // request a window without the title
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
+        return dialog;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,7 +77,6 @@ public class ComposeDialogFragment extends DialogFragment  {
         tvUserName = (TextView) view.findViewById(R.id.tvUsernameCompose);
         ivProfileImageCompose = (ImageView) view.findViewById(R.id.ivProfileImageCompose);
         btnTweet = (Button)view.findViewById(R.id.btnTweet);
-        btnCancel = (Button) view.findViewById(R.id.btnCancel);
 
         etNewWeet.requestFocus();
 
@@ -75,13 +89,6 @@ public class ComposeDialogFragment extends DialogFragment  {
             }
         });
 
-        //cancel button click
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
     }
 
     @Override
@@ -99,7 +106,10 @@ public class ComposeDialogFragment extends DialogFragment  {
                 //set username
                 tvUserName.setText(user.getScreenName());
                 //set profile image
-                Picasso.with(getContext()).load(user.getProfileImageUrl()).into(ivProfileImageCompose);
+                Picasso.with(getContext())
+                    .load(user.getProfileImageUrl())
+                    .transform(TwitterUtil.getRoundedCornersTreansformation())
+                    .into(ivProfileImageCompose);
 
             }
             @Override
