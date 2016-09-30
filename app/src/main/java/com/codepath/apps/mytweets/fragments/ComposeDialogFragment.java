@@ -40,7 +40,6 @@ public class ComposeDialogFragment extends DialogFragment  {
     Button btnCancel;
     ImageView ivProfileImageCompose;
     User user;
-    private Tweet newTweet;
 
 
     private TwitterClient client;
@@ -143,22 +142,18 @@ public class ComposeDialogFragment extends DialogFragment  {
                     JSONObject jsonObject= new JSONObject(new String(responseBody));
                     Log.d("DEBUG","Tweet Object"+jsonObject.toString());
 
-                    newTweet = Tweet.fromJson(jsonObject);
-
-                }
-                catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
-                finally {
+                    Tweet newTweet = Tweet.fromJson(jsonObject);
 
                     // send newTweet to Parent activity - TimelineActivity
-                     if(mListener !=null && newTweet !=null) {
+                    if(mListener != null && newTweet !=null) {
 
-                         mListener.onFinishComposeDialog(newTweet);
-                         dismiss(); // close dialogfragment
+                        mListener.onFinishComposeDialog(newTweet);
+                        dismiss(); // close dialogfragment
 
                     }
+                }
+                catch (JSONException e){
+                    e.printStackTrace();
                 }
 
             }
@@ -176,12 +171,10 @@ public class ComposeDialogFragment extends DialogFragment  {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if(context instanceof ComposeDialogListener)
-        {
+        if(context instanceof ComposeDialogListener){
             mListener = (ComposeDialogListener) context;
         }
-        else
-        {
+        else{
             throw new RuntimeException(context.toString()
             + " must implement OnFinishComposeDialog");
         }

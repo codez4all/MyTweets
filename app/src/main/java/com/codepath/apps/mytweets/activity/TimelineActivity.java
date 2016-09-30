@@ -34,8 +34,8 @@ public class TimelineActivity extends AppCompatActivity
 
     private ViewPager viewPager;
     private PagerSlidingTabStrip tabStrip;
+    private TweetsPagerAdapter tweetsPagerAdapter;
 
-    HomeTimelineFragment instanceHomeTimelineFrag;
 
 
 
@@ -53,7 +53,8 @@ public class TimelineActivity extends AppCompatActivity
         viewPager = (ViewPager)findViewById(R.id.viewpager);
 
         //Attach ViewPager to PagerAdapter
-        viewPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        tweetsPagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(tweetsPagerAdapter);
 
         //Find the sliding tabstrip
         tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
@@ -121,8 +122,11 @@ public class TimelineActivity extends AppCompatActivity
     public class TweetsPagerAdapter extends FragmentPagerAdapter {
 
         private  String tabTitles[]={"Home","Mentions"};
+        HomeTimelineFragment homeTimelineFragment;
 
-        public TweetsPagerAdapter(FragmentManager fm) {
+
+
+      public TweetsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -130,8 +134,11 @@ public class TimelineActivity extends AppCompatActivity
         public Fragment getItem(int position) {
             if(position==0)
             {
-                instanceHomeTimelineFrag = new HomeTimelineFragment();
-                return  instanceHomeTimelineFrag;
+                if(homeTimelineFragment == null){
+                  homeTimelineFragment = new HomeTimelineFragment();
+                }
+
+                return  homeTimelineFragment;
             }
             else if(position ==1)
             {
@@ -162,6 +169,7 @@ public class TimelineActivity extends AppCompatActivity
     public void onFinishComposeDialog(Tweet newTweet) {
 
         // TimelineActivity sends newTweet to HomeTimelineFragment through method
-        instanceHomeTimelineFrag.addNewTweet(newTweet);
+        HomeTimelineFragment homeTimelineFragment = (HomeTimelineFragment) tweetsPagerAdapter.getItem(0);
+        homeTimelineFragment.addNewTweet(newTweet);
     }
 }
