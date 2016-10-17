@@ -1,9 +1,10 @@
-package com.codepath.apps.mytweets;
+package com.codepath.apps.mytweets.networking;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.codepath.apps.mytweets.R;
 import com.codepath.apps.mytweets.activity.TimelineActivity;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 

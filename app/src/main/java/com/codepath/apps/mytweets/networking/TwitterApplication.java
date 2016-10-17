@@ -1,6 +1,8 @@
-package com.codepath.apps.mytweets;
+package com.codepath.apps.mytweets.networking;
 
 import android.content.Context;
+
+import com.codepath.apps.mytweets.R;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 

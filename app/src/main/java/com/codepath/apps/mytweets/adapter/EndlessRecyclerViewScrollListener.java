@@ -1,4 +1,4 @@
-package com.codepath.apps.mytweets;
+package com.codepath.apps.mytweets.adapter;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;

@@ -2,15 +2,18 @@ package com.codepath.apps.mytweets.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.codepath.apps.mytweets.EndlessRecyclerViewScrollListener;
-import com.codepath.apps.mytweets.TwitterApplication;
-import com.codepath.apps.mytweets.TwitterClient;
+import com.codepath.apps.mytweets.adapter.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.mytweets.models.Tweet;
+import com.codepath.apps.mytweets.networking.TwitterApplication;
+import com.codepath.apps.mytweets.networking.TwitterClient;
+import com.codepath.apps.mytweets.utils.TwitterUtil;
+import com.codepath.apps.mytweets.utils.TweetDatabase;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -26,6 +29,8 @@ import cz.msebera.android.httpclient.Header;
 public class HomeTimelineFragment extends TweetsListFragment  {
 
     private TwitterClient client;
+    TweetDatabase dbHelper;
+
 
 
     @Nullable
@@ -44,6 +49,14 @@ public class HomeTimelineFragment extends TweetsListFragment  {
 
         });
 
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                populateTimeline(1);
+            }
+        });
+
         return v;
     }
 
@@ -51,9 +64,18 @@ public class HomeTimelineFragment extends TweetsListFragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        client = TwitterApplication.getRestClient(); //singletone client
-        populateTimeline(1);
+        dbHelper = TweetDatabase.getInstance(getContext());
 
+        client = TwitterApplication.getRestClient(); //singletone client
+
+        if (TwitterUtil.isOnline()) {
+            populateTimeline(1);
+        }
+        else
+        {
+            ArrayList<Tweet> readTweetsFromDB = dbHelper.getAllTweetsFromDB();
+            addAll(readTweetsFromDB);
+        }
     }
 
 
@@ -70,10 +92,16 @@ public class HomeTimelineFragment extends TweetsListFragment  {
                 super.onSuccess(statusCode, headers, json);
                 //Deserialize Json, Create models and load model data into listview
 
+                recycleAdapter.clear();
                 ArrayList<Tweet> arrayList = Tweet.fromJsonArray(json);
-
                 addAll(arrayList);
+                swipeContainer.setRefreshing(false);
 
+                //add tweets to db
+                for (int i=0; i< arrayList.size(); i++)
+                {
+                    dbHelper.addTweetToDB(arrayList.get(i));
+                }
             }
 
             //Failure
@@ -87,9 +115,9 @@ public class HomeTimelineFragment extends TweetsListFragment  {
     }
 
 
-    public void addNewTweet(Tweet newTweet)
+    /*public void addNewTweet(Tweet newTweet)
     {
         add(newTweet);
         Log.d("DEBUG","In method addNewTweet - HomeTimeline Fragment ");
-    }
+    }*/
 }

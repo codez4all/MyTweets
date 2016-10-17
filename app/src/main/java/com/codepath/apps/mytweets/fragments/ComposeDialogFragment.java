@@ -17,8 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.mytweets.R;
-import com.codepath.apps.mytweets.TwitterApplication;
-import com.codepath.apps.mytweets.TwitterClient;
+import com.codepath.apps.mytweets.networking.TwitterApplication;
+import com.codepath.apps.mytweets.networking.TwitterClient;
 import com.codepath.apps.mytweets.models.Tweet;
 import com.codepath.apps.mytweets.models.User;
 import com.codepath.apps.mytweets.utils.TwitterUtil;
@@ -28,6 +28,8 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.StringTokenizer;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -46,11 +48,22 @@ public class ComposeDialogFragment extends DialogFragment  {
     private TwitterClient client;
     private ComposeDialogListener mListener;
 
-    public static ComposeDialogFragment newInstance()
+    // for Compose option
+    public static ComposeDialogFragment newInstance(Tweet tweetFrom)
     {
         ComposeDialogFragment dialogFragment = new ComposeDialogFragment();
+
+        // for reply option bundle the tweet from original user and send to dialog fragment
+        // if tweetFrom is null, it is simply compose option
+        if(tweetFrom != null)
+        {
+            Bundle args = new Bundle();
+            args.putSerializable("TweetFrom", tweetFrom);
+            dialogFragment.setArguments(args);
+        }
         return  dialogFragment;
     }
+
 
     public ComposeDialogFragment()
     {
@@ -83,6 +96,16 @@ public class ComposeDialogFragment extends DialogFragment  {
         ivProfileImageCompose = (ImageView) view.findViewById(R.id.ivProfileImageCompose);
         btnTweet = (Button)view.findViewById(R.id.btnTweet);
 
+        // for reply option set the @FromUserName in body
+        if(getArguments() != null) {
+
+            Tweet tweetFrom = (Tweet) getArguments().getSerializable("TweetFrom");
+            if (tweetFrom != null)
+            {
+                etNewWeet.setText( "@" +tweetFrom.getUser().getScreenName() + " ");
+            }
+        }
+
         etNewWeet.requestFocus();
 
         //on Tweet button click
@@ -90,7 +113,7 @@ public class ComposeDialogFragment extends DialogFragment  {
             @Override
             public void onClick(View v) {
                 composeTweet();
-                //dismiss();
+
             }
         });
 
@@ -100,16 +123,19 @@ public class ComposeDialogFragment extends DialogFragment  {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         client = TwitterApplication.getRestClient(); //singletone client
 
-        client.getUserInfo(new JsonHttpResponseHandler(){
+        client.getCurrentUserInfo(new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
 
                 user = User.fromJason(response);
                 //set username
-                tvUserName.setText(user.getScreenName());
+                StringTokenizer token = new StringTokenizer(user.getName());
+                tvUserName.setText(token.nextToken() +" @" + user.getScreenName());
                 //set profile image
                 Picasso.with(getContext())
                     .load(user.getProfileImageUrl())
@@ -145,20 +171,17 @@ public class ComposeDialogFragment extends DialogFragment  {
 
                     newTweet = Tweet.fromJson(jsonObject);
 
+                    if(mListener !=null && newTweet !=null) {
+
+                        mListener.onFinishComposeDialog(newTweet);
+                        dismiss(); // close dialogfragment
+
+                    }
+
                 }
                 catch (JSONException e)
                 {
                     e.printStackTrace();
-                }
-                finally {
-
-                    // send newTweet to Parent activity - TimelineActivity
-                     if(mListener !=null && newTweet !=null) {
-
-                         mListener.onFinishComposeDialog(newTweet);
-                         dismiss(); // close dialogfragment
-
-                    }
                 }
 
             }

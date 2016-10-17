@@ -1,10 +1,15 @@
 package com.codepath.apps.mytweets.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import com.codepath.apps.mytweets.TwitterApplication;
-import com.codepath.apps.mytweets.TwitterClient;
+import com.codepath.apps.mytweets.networking.TwitterApplication;
+import com.codepath.apps.mytweets.networking.TwitterClient;
 import com.codepath.apps.mytweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -22,12 +27,26 @@ public class UserTimelineFragment extends TweetsListFragment {
 
     private TwitterClient client;
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View v =  super.onCreateView(inflater, container, savedInstanceState);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                populateUserTimeline();
+            }
+        });
+
+        return v;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         client = TwitterApplication.getRestClient(); //singletone client
-
         populateUserTimeline();
 
     }
@@ -55,10 +74,12 @@ public class UserTimelineFragment extends TweetsListFragment {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 super.onSuccess(statusCode, headers, json);
+                recycleAdapter.clear();
                 //Deserialize Json, Create models and load model data into listview
                 ArrayList<Tweet> arrayList = Tweet.fromJsonArray(json);
                 Log.d("DEBUG", "UserTimeLine"+ arrayList.toString());
                 addAll(arrayList);
+                swipeContainer.setRefreshing(false);
             }
 
 

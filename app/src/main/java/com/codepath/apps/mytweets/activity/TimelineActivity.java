@@ -18,11 +18,18 @@ import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mytweets.R;
+import com.codepath.apps.mytweets.networking.TwitterApplication;
+import com.codepath.apps.mytweets.networking.TwitterClient;
 import com.codepath.apps.mytweets.fragments.ComposeDialogFragment;
 import com.codepath.apps.mytweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mytweets.fragments.MentionsTimelineFragment;
 import com.codepath.apps.mytweets.models.Tweet;
+import com.codepath.apps.mytweets.models.User;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class TimelineActivity extends AppCompatActivity
@@ -36,13 +43,16 @@ public class TimelineActivity extends AppCompatActivity
     private PagerSlidingTabStrip tabStrip;
 
     HomeTimelineFragment instanceHomeTimelineFrag;
-
+    private TwitterClient client;
+    private User user;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
+        client = TwitterApplication.getRestClient();
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -96,12 +106,31 @@ public class TimelineActivity extends AppCompatActivity
            // call Compose activity on compose icon click in toolbar
            case R.id.miCompose: {
                FragmentManager fm = getSupportFragmentManager();
-               ComposeDialogFragment composeDialogFragment = ComposeDialogFragment.newInstance();
+               ComposeDialogFragment composeDialogFragment = ComposeDialogFragment.newInstance(null);
                composeDialogFragment.show(fm,"fragment_compose");
            }
             break;
             case R.id.miProfile: {
-                onProfileView(item);
+
+                client.getCurrentUserInfo(new JsonHttpResponseHandler(){
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+
+                        user = User.fromJason(response);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                    }
+
+                });
+
+                if(user != null) {
+                    onProfileView(TimelineActivity.this,user);
+                }
             }
             break;
        }
@@ -110,11 +139,12 @@ public class TimelineActivity extends AppCompatActivity
     }
 
 
-    public void onProfileView(MenuItem item) {
+    public void onProfileView(Context context, User user) {
 
-        Intent iProfile = new Intent(TimelineActivity.this,ProfileActivity.class);
+        Intent iProfile = new Intent(context,ProfileActivity.class);
+        iProfile.putExtra("user", user);
+
         startActivity(iProfile);
-
     }
 
 

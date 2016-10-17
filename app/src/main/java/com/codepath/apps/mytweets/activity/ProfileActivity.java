@@ -1,5 +1,6 @@
 package com.codepath.apps.mytweets.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -9,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.mytweets.R;
-import com.codepath.apps.mytweets.TwitterApplication;
-import com.codepath.apps.mytweets.TwitterClient;
+import com.codepath.apps.mytweets.networking.TwitterApplication;
+import com.codepath.apps.mytweets.networking.TwitterClient;
 import com.codepath.apps.mytweets.fragments.UserTimelineFragment;
 import com.codepath.apps.mytweets.models.User;
 import com.codepath.apps.mytweets.utils.TwitterUtil;
@@ -24,12 +25,15 @@ import java.util.StringTokenizer;
 public class ProfileActivity extends AppCompatActivity {
 
     private TwitterClient client;
-    User user;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        Intent intent = getIntent();
+        user = (User) intent.getSerializableExtra("user");
 
         // This is for full screen
         getWindow().getDecorView().setSystemUiVisibility(
@@ -38,36 +42,37 @@ public class ProfileActivity extends AppCompatActivity {
 
         client = TwitterApplication.getRestClient();
 
-        client.getUserInfo(new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
+        if(user !=null) {
+
+            client.getUserInfo(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                    super.onSuccess(statusCode, headers, response);
 
 
-                user = User.fromJason(response);
+                    user = User.fromJason(response);
 
-                Log.d("DEBUG", user.getScreenName().toString());
-                populateProfileHeader(user);
+                    Log.d("DEBUG", user.getScreenName().toString());
+                    populateProfileHeader(user);
 
-                //create usertimeline fragment
-                UserTimelineFragment fragmentUser = UserTimelineFragment.newInstance(user.getScreenName());
-                //Display user fragment within activity dynamically
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.flContainer, fragmentUser);
-                ft.commit();
-            }
-
-
-            @Override
-            public void onFailure(int statusCode,  cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-
-                Log.d("DEBUG", errorResponse.toString());
-            }
-
-        });
+                    //create usertimeline fragment
+                    UserTimelineFragment fragmentUser = UserTimelineFragment.newInstance(user.getScreenName());
+                    //Display user fragment within activity dynamically
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.flContainer, fragmentUser);
+                    ft.commit();
+                }
 
 
+                @Override
+                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+
+                    Log.d("DEBUG", errorResponse.toString());
+                }
+
+            }, user.getUid(), user.getScreenName());
+        }
     }
 
 

@@ -126,11 +126,64 @@ public class Tweet  implements Serializable {
         return user;
     }
 
+    public long getRetweetCount() {
+        return retweetCount;
+    }
+
+    public boolean isReTweeted() {
+        return isReTweeted;
+    }
+
+    public boolean isfavorited() {
+        return isfavorited;
+    }
+
+    public long getFavouritesCount() {
+        return favouritesCount;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setRetweetCount(long retweetCount) {
+        this.retweetCount = retweetCount;
+    }
+
+    public void setReTweeted(boolean reTweeted) {
+        this.isReTweeted = reTweeted;
+    }
+
+    public void setIsfavorited(boolean isfavorited) {
+        this.isfavorited = isfavorited;
+    }
+
+    public void setFavouritesCount(long favouritesCount) {
+        this.favouritesCount = favouritesCount;
+    }
+
     //list out the attributes
     private String body;
     private  long uid; //uniquue id for the tweet
     private User user;
     private String createdAt;
+    private long retweetCount;
+    private boolean isReTweeted;
+    private boolean isfavorited;
+    private long favouritesCount;
+
 
 
     //DeSerialize Json
@@ -145,6 +198,10 @@ public class Tweet  implements Serializable {
             tweet.uid = jsonObject.getLong("id");
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.fromJason(jsonObject.getJSONObject("user"));
+            tweet.isReTweeted = jsonObject.getBoolean("retweeted");
+            tweet.retweetCount = jsonObject.getLong("retweet_count");
+            tweet.isfavorited = jsonObject.getBoolean("favorited");
+            tweet.favouritesCount = jsonObject.getLong("favourites_count");
 
         }catch (JSONException e)
         {

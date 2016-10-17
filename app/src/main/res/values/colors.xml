@@ -6,9 +6,12 @@
     <color name="colorLightGray">#ededed</color>
 
     <color name="colorBlack">#14171A</color>
+    <color name="colorWhite">#FFFFFF</color>
     <color name="colorTextLightGray">#AAB8C2</color>
     <color name="colorTextDarkGray">#657786</color>
 
     <color name="colorIconTint">#757575</color>
     <color name="colorLightGrayTweeter">#AAB8C2</color>
+    <color name="colorGreen">#44ec9e</color>
+    <color name="colorRed">#ec444f</color>
 </resources>

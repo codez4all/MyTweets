@@ -11,8 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.codepath.apps.mytweets.R;
-import com.codepath.apps.mytweets.TwitterApplication;
-import com.codepath.apps.mytweets.TwitterClient;
+import com.codepath.apps.mytweets.networking.TwitterApplication;
+import com.codepath.apps.mytweets.networking.TwitterClient;
 import com.codepath.apps.mytweets.models.Tweet;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 

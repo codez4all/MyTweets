@@ -10,9 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.codepath.apps.mytweets.ParseRelativeDate;
 import com.codepath.apps.mytweets.R;
 import com.codepath.apps.mytweets.models.Tweet;
+import com.codepath.apps.mytweets.utils.TwitterUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -56,7 +56,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         tvBody.setTextColor(Color.BLACK);
         tvUserName.setTextColor(Color.BLACK);
 
-        String relativeDate = ParseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt().toString());
+        String relativeDate = TwitterUtil.getRelativeTimeAgo(tweet.getCreatedAt().toString());
         tvTimestamp.setText(relativeDate);
 
         return  convertView;

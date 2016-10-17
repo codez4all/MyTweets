@@ -25,9 +25,7 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile('com.codepath.libraries:android-oauth-handler:1.0.0@aar') {
-        transitive = true
-    }
+    compile 'com.codepath.libraries:android-oauth-handler:1.1.0'
     // Picasso for remote image loading
     // Android Async Http for sending async network requests
     // ActiveAndroid for simple persistence with an ORM
